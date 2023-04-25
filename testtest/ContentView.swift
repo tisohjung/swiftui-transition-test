@@ -11,6 +11,24 @@ enum Tabs {
   case one, two, three, four
 }
 
+public extension AnyTransition {
+
+  static var bottomNav: Self {
+    let showAnimation: AnyTransition = .opacity
+      .combined(with: .offset(x: -25))
+      .animation(.timingCurve(0.18, 0.64, 0.52, 1, duration: 0.17).delay(0.17))
+    let hideAnimation: AnyTransition = .opacity
+      .combined(with: .offset(x: -25))
+      .animation(.timingCurve(0.54, 0.11, 0.92, 0.5, duration: 0.17))
+
+    return AnyTransition
+      .asymmetric(
+        insertion: showAnimation,
+        removal: hideAnimation
+      )
+  }
+}
+
 struct ContentView: View {
   @State var tab: Tabs = .one
 
@@ -54,6 +72,40 @@ struct ContentView: View {
             }
         }
       }
+      .transition(.bottomNav)
+
+      HStack {
+        Button {
+          withAnimation {
+            tab = .two
+          }
+        } label: {
+          Text("One")
+        }
+        Button {
+          withAnimation {
+            tab = .three
+          }
+        } label: {
+          Text("Two")
+        }
+        Button {
+          withAnimation {
+            tab = .four
+          }
+        } label: {
+          Text("Three")
+        }
+        Button {
+          withAnimation {
+            tab = .one
+          }
+        } label: {
+          Text("Four")
+        }
+      }
+    }
+    .ignoresSafeArea()
   }
 }
 
